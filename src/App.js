@@ -1,10 +1,10 @@
 import './App.css';
 import { BrowserRouter, Route, Router, Routes } from 'react-router-dom';
 import Navigation from './components/Navigation';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Chat from './pages/Chat';
+import Home from './pages/home/Home';
+import Login from './pages/login/Login';
+import Signup from './pages/signup/Signup';
+import Chat from './pages/chat/Chat';
 
 function App() {
   return (
