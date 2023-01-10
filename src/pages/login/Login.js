@@ -1,14 +1,28 @@
-import React, { useState } from 'react'
-import { Col, Container } from 'react-bootstrap'
+import React, { useContext, useState } from 'react'
+import { Col, Container, Spinner } from 'react-bootstrap'
 import './Login.css'
 import { Form,Row,Button } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link,useNavigate } from 'react-router-dom'
+import { useLoginUserMutation } from '../../services/appApi'
+import { AppContext } from '../../context/appContext'
+
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const {socket} = useContext(AppContext)
+  const [loginUser, { isLoading, error }] = useLoginUserMutation();
+  const navigate = useNavigate();
+  
   const handleLogin = ((e) => {
     e.preventDefault();
+    //login logic
+    loginUser({ email, password }).then(({ data }) => {
+      //socket work
+      socket.emit('new-user');
+      //navigate to the chat
+      navigate('/chat')
+    })
+
   })
   return (
     <Container>
@@ -17,6 +31,7 @@ function Login() {
         <Col md={7} className="d-flex flex-direction-column align-items-center justify-content-center">
           <Form style={{width:"80%",maxWidth:500}} onSubmit={handleLogin}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
+              {error && <p className='alert alert-danger'>{error.data}</p>}
               <Form.Label>Email address</Form.Label>
               <Form.Control type="email" placeholder="Enter email" onChange={(e)=>setEmail(e.target.value)} value={email} />
               <Form.Text className="text-muted">
@@ -29,7 +44,7 @@ function Login() {
               <Form.Control type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} />
             </Form.Group>
             <Button variant="primary" type="submit">
-              Login
+              {isLoading? <Spinner animation='grow'/>:"Login"}
             </Button>
             <div className='py-4'>
               <p className='text-center'>

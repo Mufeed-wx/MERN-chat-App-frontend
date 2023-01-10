@@ -1,4 +1,8 @@
-*{
+body{
+    overflow-y:scroll;
     overflow-x: hidden;
-    overflow-y: hidden;
+}
+
+*::-webkit-scrollbar {
+    display: none;
 }
